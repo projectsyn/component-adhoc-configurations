@@ -1,0 +1,5 @@
+= adhoc-configurations
+
+adhoc-configurations is a Commodore component to manage adhoc-configurations.
+
+See the xref:references/parameters.adoc[parameters] reference for further details.
