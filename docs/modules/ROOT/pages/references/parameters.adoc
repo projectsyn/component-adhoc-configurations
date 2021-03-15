@@ -13,9 +13,30 @@ Base directory in which the ad-hoc manifests are saved in the tenant repo.
 The component will copy any files saved at the path indicated by `manifests_path` in the tenant repo to the cluster catalog.
 
 
-== Example
+== Examples
+
+=== Shared manifests for all clusters of a tenant
+
+If you don't specify `${cluster:name}` in the `manifests_path`, all files in `<manifests_path>` will be copied to the cluster catalog.
 
 [source,yaml]
 ----
-namespace: example-namespace
+applications:
+  - adhoc-configurations
+
+parameters:
+  adhoc_configurations:
+    manifests_path: manifests
+----
+
+=== Different base directory
+
+[source,yaml]
+----
+applications:
+  - adhoc-configurations
+
+parameters:
+  adhoc_configurations:
+    manifests_path: customizations/${cluster:name}
 ----
