@@ -6,11 +6,11 @@ The parent key for all of the following parameters is `adhoc_configurations`.
 
 [horizontal]
 type:: string
-default:: `manifests`
+default:: `manifests/${cluster:name}`
 
 Base directory in which the ad-hoc manifests are saved in the tenant repo.
 
-The component will copy any files in the tenant repo under `manfests/${cluster_name}` to the cluster catalog.
+The component will copy any files saved at the path indicated by `manifests_path` in the tenant repo to the cluster catalog.
 
 
 == Example
