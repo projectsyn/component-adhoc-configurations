@@ -1,0 +1,71 @@
+= Quick-start guide
+
+== Introduction
+
+It's quite straightforward to start using the ad-hoc configurations component.
+
+The basic steps are outlined in the <<_quick_start, next section>>.
+
+This guide assumes that you have the tenant and cluster ids as environment variables and that you can compile catalogs locally.
+
+TODO: ref to catalog compilation quickstart
+
+[source,shell]
+----
+TENANT_ID=<the tenant id>
+CLUSTER_ID=<the cluster id>
+----
+
+[NOTE]
+====
+The component expects that all customizations are valid Kubernetes manifests.
+Customizations are copied to the cluster catalog without any further processing.
+====
+
+== Quick-start
+
+. Enable the component for the cluster in tenant repository
++
+[source,yaml]
+.c-cluster-id.yml
+----
+applications:
+  - adhoc-configurations
+----
+
+. Create the directory for cluster customizations
+.. By default, the component will use `manifests` as the root directory for customizations.
++
+The component will look for customizations for a cluster in directory `${CLUSTER_ID}` inside the root directory.
++
+[source,shell]
+----
+mkdir -p inventory/classes/${TENANT_ID}/manifests/${CLUSTER_ID}
+----
+.. If, for some reason, you can't or don't want to use `manifests` as the root directory for customizations, you can change the root directory in `parameters.adhoc_configurations`.
++
+[source,yaml]
+.c-cluster-id.yml
+----
+parameters:
+  adhoc_configurations:
+    manifests_path: customizations
+----
++
+You'll have to create the matching directory in the tenant repository.
++
+[source,shell]
+----
+mkdir -p inventory/classes/${TENANT_ID}/customizations/${CLUSTER_ID}
+----
+
+. Now you can add manifests in the directory you've created in previous step.
++
+All files which are added in the customizations directory for the cluster are copied into the cluster catalog.
+Commodore doesn't validate or process the files in the customizations directory.
+
+. Commit changes in tenant repository and recompile cluster catalog
+
+. Submit feature requests to product team
++
+Detailed process for feature requests TBD

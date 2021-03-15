@@ -1,5 +1,5 @@
-= adhoc-configurations
+= Ad-hoc configurations
 
-adhoc-configurations is a Commodore component to manage adhoc-configurations.
+adhoc-configurations is a Commodore component to manhge ad-hoc configurations on clusters.
 
-See the xref:references/parameters.adoc[parameters] reference for further details.
+See the xref:how-tos/quickstart.adoc[quick-start guide] to get started.

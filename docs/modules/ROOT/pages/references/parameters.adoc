@@ -2,13 +2,15 @@
 
 The parent key for all of the following parameters is `adhoc_configurations`.
 
-== `namespace`
+== `manifests_path`
 
 [horizontal]
 type:: string
-default:: `syn-adhoc-configurations`
+default:: `manifests`
 
-The namespace in which to deploy this component.
+Base directory in which the ad-hoc manifests are saved in the tenant repo.
+
+The component will copy any files in the tenant repo under `manfests/${cluster_name}` to the cluster catalog.
 
 
 == Example
