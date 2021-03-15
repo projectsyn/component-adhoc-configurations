@@ -6,7 +6,6 @@ parameters:
         input_type: jsonnet
         output_path: apps/
       - input_paths:
-          - adhoc-configurations/component/main.jsonnet
-        input_type: jsonnet
+          - inventory/classes/${cluster:tenant}/${adhoc_configurations:manifests_path}/${cluster:name}
+        input_type: copy
         output_path: adhoc-configurations/
-
