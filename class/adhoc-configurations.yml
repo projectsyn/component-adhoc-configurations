@@ -13,3 +13,9 @@ parameters:
           - adhoc-configurations/component/main.jsonnet
         input_type: jsonnet
         output_path: adhoc-configurations/
+  commodore:
+    postprocess:
+      filters:
+        - type: jsonnet
+          path: adhoc-configurations/
+          filter: postprocess/resource_locker.jsonnet
