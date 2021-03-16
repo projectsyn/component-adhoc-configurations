@@ -1,0 +1,94 @@
+= Quick-start guide
+
+== Introduction
+
+It's quite straightforward to start using the ad-hoc configurations component.
+
+The basic steps are outlined in the <<_quick_start, next section>>.
+
+This guide assumes that you  can compile catalogs locally.
+Additionally, this guide assumes that you have the cluster and tenant IDs as environment variables.
+
+[source,shell]
+----
+export TENANT_ID=<the tenant id>
+export CLUSTER_ID=<the cluster id>
+----
+
+[NOTE]
+====
+The component expects that all customizations are valid Kubernetes manifests.
+Customizations are copied to the cluster catalog without any further processing.
+Manifests without `.metadata.namespace` will be deployed in the `default` namespace on the cluster.
+====
+
+== Quick-start
+
+. Compile cluster catalog locally to get access to the tenant repository
++
+[source,shell]
+----
+tempdir=$(mktemp -d)
+pushd "${tempdir}"
+commodore catalog compile ${CLUSTER_ID}
+----
++
+NOTE: To run `commodore` from any directory it should be in `$PATH` or an alias to a containerized Commodore.
+
+. Enable the component in the cluster's configuration in the tenant repository.
+The tenant repository should be at `inventory/classes/${TENANT_ID}`, if you're following this guide.
++
+[source,yaml]
+.c-cluster-id.yml
+----
+applications:
+  - adhoc-configurations
+----
+
+. Create the directory for storing cluster customizations
+.. If not specified otherwise, the component will use `manifests` as the root directory for customizations.
++
+When using the default configuration, the component will look for customizations for a cluster in directory `${CLUSTER_ID}` inside the `manifests` directory.
++
+[source,shell]
+----
+mkdir -p inventory/classes/${TENANT_ID}/manifests/${CLUSTER_ID}
+----
+.. If, for some reason, you can't or don't want to use `manifests` as the root directory for customizations, you can change the root directory in `parameters.adhoc_configurations`.
++
+[source,yaml]
+.c-cluster-id.yml
+----
+parameters:
+  adhoc_configurations:
+    manifests_path: customizations/${cluster:name}
+----
++
+You'll have to create the matching directory in the tenant repository.
++
+[source,shell]
+----
+mkdir -p inventory/classes/${TENANT_ID}/customizations/${CLUSTER_ID}
+----
++
+NOTE: if you don't add the cluster's id (`${cluster:name}`) somewhere in the `manifests_path` parameter, Commodore will always copy over all the files in the directory indicated by `manifests_path`.
+
+. Now you can add manifests in the directory you've created in previous step.
++
+All files which are added in the customizations directory for the cluster are copied into the cluster catalog.
+Commodore doesn't validate or process the files in the customizations directory.
+
+. Commit changes in tenant repository and recompile cluster catalog
++
+[source,shell]
+----
+commodore catalog compile ${CLUSTER_ID} --push --interactive
+
+# Finally, cleanup temp directory
+popd
+rm -r "${tempdir}"
+----
+
+. Submit feature requests to product team
++
+Detailed process for feature requests TBD

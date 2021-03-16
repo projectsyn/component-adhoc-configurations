@@ -2,18 +2,69 @@
 
 The parent key for all of the following parameters is `adhoc_configurations`.
 
-== `namespace`
+== `manifests_path`
 
 [horizontal]
 type:: string
-default:: `syn-adhoc-configurations`
+default:: `manifests/${cluster:name}`
 
-The namespace in which to deploy this component.
+Base directory in which the ad-hoc manifests are saved in the tenant repo.
+
+The component will copy any files saved at the path indicated by `manifests_path` in the tenant repo to the cluster catalog.
 
 
-== Example
+== Examples
+
+=== Shared manifests for all clusters of a tenant
+
+If you don't specify `${cluster:name}` in the `manifests_path`, all files in `<manifests_path>` will be copied to the cluster catalog.
 
 [source,yaml]
 ----
-namespace: example-namespace
+applications:
+  - adhoc-configurations
+
+parameters:
+  adhoc_configurations:
+    manifests_path: manifests
 ----
+
+=== Different base directory
+
+[source,yaml]
+----
+applications:
+  - adhoc-configurations
+
+parameters:
+  adhoc_configurations:
+    manifests_path: customizations/${cluster:name}
+----
+
+=== Shared and per-cluster manifests
+
+To have both shared and per-cluster manifests for a tenant, you can use symlinks to make the shared manifests available in all cluster directories.
+
+Assuming that you are using the default location of `manifests/${cluster:name}` in the tenant repository, you can use a structure like the one shown below to have a mix of shared and per-cluster manifests.
+
+----
+t-tenant-id-0011/
+├── c-cluster-id-1234.yml
+├── c-cluster-id-5678.yml
+├── common.yml
+└── manifests
+    ├── common
+    │   ├── rbac.yaml
+    │   └── test.yaml
+    └── c-cluster-id-1234
+    │   ├── networkpolicies.yaml <1>
+    │   └── rbac.yaml -> ../common/rbac.yaml <2>
+    └── c-cluster-id-5678
+        ├── networkpolicies.yaml <1>
+        └── rbac.yaml -> ../common/rbac.yaml <2>
+----
+<1> Per-cluster networkpolicy configurations
+<2> Symlink pointing to the shared RBAC configuration in `manifests/common`.
+
+Note that the files in `manifests/common` are not directly copied to the catalog by Commodore.
+They're only considered if they're symlinked to a cluster's directory.
