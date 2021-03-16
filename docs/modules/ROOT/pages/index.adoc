@@ -1,5 +1,8 @@
 = Ad-hoc configurations
 
-adhoc-configurations is a Commodore component to manhge ad-hoc configurations on clusters.
+`adhoc-configurations` is a Commodore component to manage one-off configurations on clusters.
+
+The intention of this component is to allow users to manage one-off configurations which are not generic enough to warrant a component or as a work-around to deploy configurations until they're implemented in a component.
+In the second case, feel free to ask about the missing features or component at `ahoy@syn.tools`.
 
 See the xref:how-tos/quickstart.adoc[quick-start guide] to get started.
