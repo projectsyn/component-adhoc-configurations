@@ -19,6 +19,7 @@ export CLUSTER_ID=<the cluster id>
 ====
 The component expects that all customizations are valid Kubernetes manifests.
 Customizations are copied to the cluster catalog without any further processing.
+Manifests without `.metadata.namespace` will be deployed in the `default` namespace on the cluster.
 ====
 
 == Quick-start
