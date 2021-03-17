@@ -1,0 +1,24 @@
+= Object patching architecture
+
+== Patch application infrastructure
+
+To apply object patches on the cluster we make use of the https://github.com/redhat-cop/resource-locker-operator[resource-locker-operator].
+The resource-locker-operator is deployed via Commodore component https://github.com/projectsyn/component-resource-locker[resource-locker].
+
+By default, the `adhoc-configurations` component creates a service account and clusterrolebinding to use with the patches managed by the component.
+Users can choose to bring their own ServiceAccount or ClusterRoleBinding, by setting component parameters `create_serviceaccount` and `create_clusterrolebinding` to `False` respectively.
+
+== Patch input format
+
+The input format for object patches are `ResourceLocker` objects.
+To remove some of the more tedious bits of writing `ResourceLocker` objects, the component provides some extra plumbing to ensure provided `ResourceLocker` objects work smoothly with the resource-locker-operator deployed in the cluster.
+The <<_patch_processing_by_the_component,next section>> provides a detailed description of the processing that the component does for `ResourceLocker` objects.
+
+== Patch processing by the component
+
+Using a Commodore postprocessing filter, the `adhoc-configurations` component will ensure that:
+
+* The name of each `ResourceLocker` object is prefixed with `adhoc-configurations-`.
+* The `apiVersion` of all `ResourceLocker` resources matches the version of resource-locker-operator which is deployed on the cluster.
+* The namespace of all `ResourceLocker` resources is set to the namespace in which the resource-locker-operator runs.
+* The field `spec.serviceAccountRef` of all `ResourceLocker` resources is set to the ServiceAccount managed by (or provided to) the component.

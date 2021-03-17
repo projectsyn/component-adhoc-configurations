@@ -1,3 +1,9 @@
 * xref:index.adoc[Home]
+
+.How-to guides
 * xref:how-tos/quickstart.adoc[Quick-start guide]
+* xref:how-tos/patches.adoc[Patching existing objects]
+
+.Technical reference
 * xref:references/parameters.adoc[Parameters]
+* xref:references/patches.adoc[Object patching architecture]
