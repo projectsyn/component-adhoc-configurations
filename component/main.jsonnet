@@ -2,25 +2,25 @@ local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
 local inv = kap.inventory();
 local rl_config = inv.parameters.adhoc_configurations.resourcelocker;
+local sa_config = rl_config.serviceaccount;
+local cr_config = rl_config.clusterrolebinding;
 local sa_namespace =
-  if rl_config.serviceaccount.namespace != null then
-    rl_config.serviceaccount.namespace
+  if sa_config.namespace != null then
+    sa_config.namespace
   else
     inv.parameters.resource_locker.namespace;
 
-local config_error =
-  !rl_config.create_serviceaccount &&
-  rl_config.serviceaccount.namespace == null;
+local config_error = !sa_config.create && sa_config.namespace == null;
 
 local serviceaccount =
   if config_error then (
     error |||
-      Parameter `resourcelocker.serviceaccount.namespace` must be non-null
-      when parameter `resourcelocker.create_serviceaccount` is False.
+      Parameter `resourcelocker.serviceaccount.namespace` must not be null
+      when parameter `resourcelocker.serviceaccount.create` is False.
     |||
   ) else (
-    if rl_config.create_serviceaccount then
-      kube.ServiceAccount(rl_config.serviceaccount.name) {
+    if sa_config.create then
+      kube.ServiceAccount(sa_config.name) {
         metadata+: {
           namespace: sa_namespace,
         },
@@ -34,13 +34,13 @@ local clusterrolebinding = kube.ClusterRoleBinding('adhoc-configurations-manager
   roleRef: {
     apiGroup: 'rbac.authorization.k8s.io',
     kind: 'ClusterRole',
-    name: rl_config.clusterrole_name,
+    name: cr_config.clusterrole_name,
   },
 };
 
 local rbac = std.filter(function(it) it != null, [
   serviceaccount,
-  if rl_config.create_clusterrolebinding then clusterrolebinding,
+  if cr_config.create then clusterrolebinding,
 ]);
 
 

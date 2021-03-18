@@ -17,22 +17,6 @@ The component will copy any files saved at the path indicated by `manifests_path
 
 Section to configure ServiceAccount and ClusterRoleBinding which will be used for object patches.
 
-=== `create_serviceaccount`
-
-[horizontal]
-type:: boolean
-default:: `True`
-
-Whether to create a ServiceAccount to use for ResourceLocker objects
-
-=== `create_clusterrolebinding`
-
-[horizontal]
-type:: boolean
-default:: `True`
-
-Whether to create a ClusterRoleBinding for the ServiceAccount to use for ResourceLocker objects.
-
 === `serviceaccount`
 
 [horizontal]
@@ -41,21 +25,30 @@ default::
 +
 [source,yaml]
 ----
+create: True
 name: adhoc-configurations-manager
 namespace: ~
 ----
 
-The ServiceAccount to create (or use if `create_serviceaccount` is False).
-When `create_serviceaccount` is False, `namespace` must be non-null.
+The ServiceAccount to create (or use if `create` is False).
+When field `create` is False, `namespace` must not be null.
 
-=== `clusterrole_name`
+=== `clusterrolebinding`
 
 [horizontal]
-type:: string
-default:: `cluster-admin`
+type:: dict
+default::
++
+[source,yaml]
+----
+create: True
+clusterrole_name: cluster-admin
+----
 
-Name of ClusterRole to reference in ClusterRoleBinding if `create_clusterrolebinding` is True.
-The component will never try to create a ClusterRole, but instead expects that the role referenced here exists already.
+Configuration for ClusterRoleBinding.
+The ClusterRoleBinding will only be created if field `create` is True.
+The ClusterRoleBinding will refer to a ClusterRole with name `clusterrole_name`.
+The component won't create a ClusterRole, but instead expects that the referenced role exists already.
 
 == Examples
 

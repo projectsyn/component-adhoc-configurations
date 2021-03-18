@@ -2,9 +2,10 @@ parameters:
   adhoc_configurations:
     manifests_path: manifests/${cluster:name}
     resourcelocker:
-      create_serviceaccount: True
-      create_clusterrolebinding: True
       serviceaccount:
+        create: True
         name: adhoc-configurations-manager
         namespace: ~
-      clusterrole_name: cluster-admin
+      clusterrolebinding:
+        create: True
+        clusterrole_name: cluster-admin
