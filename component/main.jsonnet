@@ -5,10 +5,14 @@ local rl_config = inv.parameters.adhoc_configurations.resourcelocker;
 local sa_config = rl_config.serviceaccount;
 local cr_config = rl_config.clusterrolebinding;
 local sa_namespace =
-  if sa_config.namespace != null then
+  if sa_config.namespace != null then (
     sa_config.namespace
-  else
-    inv.parameters.resource_locker.namespace;
+  ) else (
+    if std.objectHas(inv.parameters, 'resource_locker') then
+      inv.parameters.resource_locker.namespace
+    else
+      error 'adhoc_configurations: object patches require component resource-locker'
+  );
 
 local config_error = !sa_config.create && sa_config.namespace == null;
 
