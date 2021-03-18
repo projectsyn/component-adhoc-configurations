@@ -6,6 +6,14 @@
 
 local com = import 'lib/commodore.libjsonnet';
 local inv = com.inventory();
+local rl =
+  if std.length(std.find('resource-locker', inv.applications)) > 0 then
+    import 'lib/resource-locker.libjsonnet'
+  else
+    error |||
+      adhoc-configurations: To apply patches to existing objects on the
+      cluster the resource-locker component must be enabled for the cluster
+    |||;
 local namespace = inv.parameters.resource_locker.namespace;
 local params = inv.parameters.adhoc_configurations;
 local serviceaccountname = params.resourcelocker.serviceaccount.name;
@@ -29,7 +37,7 @@ local patch(obj) =
     else
       'adhoc-configurations-%s' % obj.metadata.name;
   obj {
-    apiVersion: 'redhatcop.redhat.io/v1alpha1',
+    apiVersion: rl.apiVersion,
     metadata+: {
       name: prefixed_name,
       namespace: namespace,
