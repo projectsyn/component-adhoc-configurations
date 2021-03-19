@@ -43,8 +43,16 @@ spec:
         name: my-service
 ----
 <1> The patch to apply
-<2> The patch strategy to use when applying the patch
+<2> The patch strategy to use when applying the patch, must be one of
++
+* `application/json-patch+json` -- equivalent to `kubectl patch --type=json`
+* `application/merge-patch+json` -- equivalent to `kubectl patch --type=merge`
+* `application/strategic-merge-patch+json` -- equivalent to `kubectl patch --type=strategic`
+* `application/apply-patch+yaml` -- equivalent to `kubectl apply --server-side=true`
++
+If the field isn't specified, it will default to `application/strategic-merge-patch+json`.
 <3> The object to patch
+
 +
 [NOTE]
 ====
