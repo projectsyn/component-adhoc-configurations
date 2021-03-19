@@ -13,6 +13,44 @@ Base directory in which the ad-hoc manifests are saved in the tenant repo.
 The component will copy any files saved at the path indicated by `manifests_path` in the tenant repo to the cluster catalog.
 
 
+== `resourcelocker`
+
+Section to configure ServiceAccount and ClusterRoleBinding which will be used for object patches.
+
+=== `serviceaccount`
+
+[horizontal]
+type:: dict
+default::
++
+[source,yaml]
+----
+create: True
+name: adhoc-configurations-manager
+----
+
+The ServiceAccount to create (or use if `create` is False).
+When `create` is False, a `ServiceAccount` with the given name must exist in the namespace in which the resource-locker-operator is installed.
+
+=== `clusterrolebinding`
+
+[horizontal]
+type:: dict
+default::
++
+[source,yaml]
+----
+create: True
+clusterrole_name: cluster-admin
+----
+
+Configuration for ClusterRoleBinding.
+The ClusterRoleBinding will only be created if field `create` is True.
+Otherwise the user needs to ensure that the ServiceAccount used for the `ResourceLocker` objects has sufficient permissions to apply the patches.
+
+The ClusterRoleBinding will refer to a ClusterRole with name `clusterrole_name`.
+The component won't create a ClusterRole, but instead expects that the referenced role exists already.
+
 == Examples
 
 === Shared manifests for all clusters of a tenant
@@ -66,5 +104,5 @@ t-tenant-id-0011/
 <1> Per-cluster networkpolicy configurations
 <2> Symlink pointing to the shared RBAC configuration in `manifests/common`.
 
-Note that the files in `manifests/common` are not directly copied to the catalog by Commodore.
+Note that the files in `manifests/common` aren't directly copied to the catalog by Commodore.
 They're only considered if they're symlinked to a cluster's directory.

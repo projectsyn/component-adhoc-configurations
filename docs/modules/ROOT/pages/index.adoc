@@ -2,7 +2,7 @@
 
 `adhoc-configurations` is a Commodore component to manage one-off configurations on clusters.
 
-The intention of this component is to allow users to manage one-off configurations which are not generic enough to warrant a component or as a work-around to deploy configurations until they're implemented in a component.
-In the second case, feel free to ask about the missing features or component at `ahoy@syn.tools`.
+The intention of this component is to allow users to manage one-off configurations which aren't generic enough to warrant a component or as a work-around to deploy configurations until they're implemented in a component.
+In the second case, feel free to send an inquiry regarding the missing features or component to `ahoy@syn.tools`.
 
 See the xref:how-tos/quickstart.adoc[quick-start guide] to get started.

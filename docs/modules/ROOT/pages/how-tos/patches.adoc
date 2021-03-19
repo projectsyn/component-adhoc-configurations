@@ -1,0 +1,67 @@
+= Patching existing objects
+
+In this guide we show how you can patch existing objects on a cluster using the `adhoc-configurations` component.
+
+The guide assumes that
+* You've already followed the xref:how-tos/quickstart.adoc[quick-start guide] to enable the component and setup a directory for manifests in your tenant repository.
+* You've prepared your object patches in a format that `kubectl patch` understands
+
+NOTE: An object patch in the context of this guide is a patch that could be applied with `kubectl patch`.
+
+. Ensure resource-locker-operator is deployed on the cluster.
++
+.c-cluster-id.yaml
+[source,yaml]
+----
+applications:
+  - resource-locker
+----
+
+. Define your `ResourceLocker` object containing your patch(es)
++
+For example, to patch a service object `my-service` in namespace `my-app` to expose target port 8000 on port 8000 in addition to existing port configurations, we'd supply the following `ResourceLocker` object.
++
+.manifests/c-cluster-id/service-patch.yaml
+[source,yaml]
+----
+kind: ResourceLocker
+metadata:
+  name: my-first-patch
+spec:
+  patches:
+    - patchTemplate: |- <1>
+        spec:
+          ports:
+            - protocol: TCP
+              port: 8000
+              targetPort: 8000
+      patchType: application/strategic-merge-patch+json <2>
+      targetObjectRef: <3>
+        apiVersion: v1
+        kind: Service
+        namespace: my-app
+        name: my-service
+----
+<1> The patch to apply
+<2> The patch strategy to use when applying the patch, must be one of
++
+* `application/json-patch+json` -- equivalent to `kubectl patch --type=json`
+* `application/merge-patch+json` -- equivalent to `kubectl patch --type=merge`
+* `application/strategic-merge-patch+json` -- equivalent to `kubectl patch --type=strategic`
+* `application/apply-patch+yaml` -- equivalent to `kubectl apply --server-side=true`
++
+If the field isn't specified, it will default to `application/strategic-merge-patch+json`.
+<3> The object to patch
+
++
+[NOTE]
+====
+A `ResourceLocker` object can contain multiple patches.
+Just add additional entries to the `spec.patches` array in the `ResourceLocker` object.
+====
+
+. Add your `ResourceLocker` manifest in the tenant repo for the cluster on which you want to apply the patch.
++
+The file holding the `ResourceLocker` manifest can be named arbitrarily.
+
+. Recompile the cluster catalog
