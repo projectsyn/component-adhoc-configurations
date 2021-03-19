@@ -5,7 +5,6 @@ parameters:
       serviceaccount:
         create: True
         name: adhoc-configurations-manager
-        namespace: ~
       clusterrolebinding:
         create: True
         clusterrole_name: cluster-admin
