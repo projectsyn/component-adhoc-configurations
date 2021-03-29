@@ -89,6 +89,6 @@ popd
 rm -r "${tempdir}"
 ----
 
-. Submit feature requests to product team
+. (VSHN-internal only for the moment) Submit feature request describing the ad-hoc configuration to the product team
 +
-Detailed process for feature requests TBD
+See the https://kb.vshn.ch/vshnsyn/how-tos/feature-requests.html[Project Syn at VSHN documentation] for a detailed description of how to create a feature request.
