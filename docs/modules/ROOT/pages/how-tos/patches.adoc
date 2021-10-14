@@ -42,7 +42,11 @@ spec:
         namespace: my-app
         name: my-service
 ----
-<1> The patch to apply
+<1> The patch to apply.
+The component can automatically inject `id: patch<N>` into each patch in the template.
+This allows existing patches to continue working when component `resource-locker` is upgraded to v2.x.
+Note that the component doesn't preserve user-provided values for field `id`.
+Further, the component doesn't remove field `id` from the provided patches when component `resource-locker` v1.x is deployed on the cluster.
 <2> The patch strategy to use when applying the patch, must be one of
 +
 * `application/json-patch+json` -- equivalent to `kubectl patch --type=json`

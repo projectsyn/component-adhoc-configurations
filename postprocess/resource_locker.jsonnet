@@ -18,6 +18,21 @@ local namespace = inv.parameters.resource_locker.namespace;
 local params = inv.parameters.adhoc_configurations;
 local serviceaccountname = params.resourcelocker.serviceaccount.name;
 
+// Extract resource locker chart version to pass to the resource-locker
+// component library's `formatPatch()`.
+// NOTE: Ideally Commodore would allow component libraries to identify whether
+// they're used during compilation or postprocessing. However, this is
+// currently not possible, since Jsonnet doesn't support checking if an
+// external variable is set/valid.
+local rl_params =
+  if std.objectHas(inv.parameters, 'resource_locker') then
+    inv.parameters.resource_locker
+  else
+    {};
+local rl_version =
+  if std.objectHas(rl_params, 'charts') then
+    rl_params.charts['resource-locker-operator'];
+
 local manifests_dir = std.extVar('output_path');
 
 local list_dir(dir, basename=true) =
@@ -43,6 +58,11 @@ local patch(obj) =
       namespace: namespace,
     },
     spec+: {
+      [if std.objectHas(obj.spec, 'patches') then 'patches']:
+        std.mapWithIndex(
+          function(idx, elem) rl.renderPatch(elem, rl_version, 'patch%d' % idx),
+          super.patches
+        ),
       serviceAccountRef: {
         name: serviceaccountname,
       },
