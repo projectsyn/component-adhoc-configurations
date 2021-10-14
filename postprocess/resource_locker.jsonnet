@@ -51,16 +51,35 @@ local patch(obj) =
 
 local fixup_obj(obj) =
   if obj.kind == 'ResourceLocker' then
-    patch(obj)
+    { obj: patch(obj), required: true }
   else
-    obj;
+    { obj: obj, required: false };
 
 local fixup(obj_file) =
   local objs = std.filter(function(it) it != null, com.yaml_load_all(obj_file));
   // process all objs
-  [ fixup_obj(obj) for obj in objs ];
+  local fixed_up_objs = [ fixup_obj(obj) for obj in objs ];
+  local fixed_up = std.foldl(
+    function(a, elem) a {
+      contents+: [ elem.obj ],
+      required: a.required || elem.required,
+    },
+    fixed_up_objs,
+    {
+      contents: [],
+      required: false,
+    }
+  );
 
-{
+  if fixed_up.required then fixed_up.contents;
+
+local output = {
   [stem(elem)]: fixup(input_file(elem))
   for elem in manifests_files
+};
+
+{
+  [fn]: output[fn]
+  for fn in std.objectFields(output)
+  if output[fn] != null
 }
