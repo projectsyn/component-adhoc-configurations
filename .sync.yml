@@ -1,6 +1,2 @@
 :global:
   componentName: adhoc-configurations
-
-docs/antora.yml:
-  name: adhoc-configurations
-  title: adhoc-configurations
