@@ -1,5 +1,6 @@
 parameters:
   adhoc_configurations:
+    argocd_ignore_differences: {}
     manifests_path: manifests/${cluster:name}
     resourcelocker:
       serviceaccount:

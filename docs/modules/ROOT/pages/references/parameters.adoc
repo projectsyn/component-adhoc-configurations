@@ -2,6 +2,18 @@
 
 The parent key for all of the following parameters is `adhoc_configurations`.
 
+== `argocd_ignore_differences`
+
+[horizontal]
+type:: object
+default:: `{}`
+
+This parameter allows users to configure ArgoCD to ignore certain differences for resources managed by the component.
+
+The component ignores the object keys, and uses the non-null values as entries for `.spec.ignoreDifferences` of the ArgoCD application resource.
+
+See the [ArgoCD documentation]https://argo-cd.readthedocs.io/en/stable/user-guide/diffing/#application-level-configuration for all available features of ArgoCD's diffing customization.
+
 == `manifests_path`
 
 [horizontal]
