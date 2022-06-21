@@ -12,7 +12,7 @@ This parameter allows users to configure ArgoCD to ignore certain differences fo
 
 The component ignores the object keys, and uses the non-null values as entries for `.spec.ignoreDifferences` of the ArgoCD application resource.
 
-See the [ArgoCD documentation]https://argo-cd.readthedocs.io/en/stable/user-guide/diffing/#application-level-configuration for all available features of ArgoCD's diffing customization.
+See the https://argo-cd.readthedocs.io/en/stable/user-guide/diffing/#application-level-configuration[ArgoCD documentation] for all available features of ArgoCD's diffing customization.
 
 == `manifests_path`
 
