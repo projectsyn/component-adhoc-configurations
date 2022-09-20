@@ -10,10 +10,23 @@ local sa_namespace =
   else
     error 'adhoc_configurations: object patches require component resource-locker';
 
+local tokensecret = kube.Secret(sa_config.name) {
+  metadata+: {
+    namespace: sa_namespace,
+    annotations+: {
+      'kubernetes.io/service-account.name': sa_config.name,
+    },
+  },
+  type: 'kubernetes.io/service-account-token',
+  // remove empty data object
+  data:: {},
+};
+
 local serviceaccount = kube.ServiceAccount(sa_config.name) {
   metadata+: {
     namespace: sa_namespace,
   },
+  secrets: [ { name: sa_config.name } ],
 };
 
 local clusterrolebinding = kube.ClusterRoleBinding('adhoc-configurations-manager') {
@@ -27,6 +40,7 @@ local clusterrolebinding = kube.ClusterRoleBinding('adhoc-configurations-manager
 
 local rbac = std.filter(function(it) it != null, [
   if sa_config.create then serviceaccount,
+  if sa_config.create then tokensecret,
   if cr_config.create then clusterrolebinding,
 ]);
 
