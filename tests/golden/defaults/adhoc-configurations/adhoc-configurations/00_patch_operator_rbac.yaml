@@ -6,19 +6,6 @@ metadata:
     name: adhoc-configurations-manager
   name: adhoc-configurations-manager
   namespace: syn-patch-operator
-secrets:
-  - name: adhoc-configurations-manager
----
-apiVersion: v1
-kind: Secret
-metadata:
-  annotations:
-    kubernetes.io/service-account.name: adhoc-configurations-manager
-  labels:
-    name: adhoc-configurations-manager
-  name: adhoc-configurations-manager
-  namespace: syn-patch-operator
-type: kubernetes.io/service-account-token
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
