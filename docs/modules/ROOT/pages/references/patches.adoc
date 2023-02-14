@@ -6,7 +6,7 @@ To apply object patches on the cluster we make use of the https://github.com/red
 The resource-locker-operator is deployed via Commodore component https://github.com/projectsyn/component-resource-locker[resource-locker].
 
 By default, the `adhoc-configurations` component creates a service account and clusterrolebinding to use with the patches managed by the component.
-Users can choose to bring their own ServiceAccount or ClusterRoleBinding, by setting component parameters `resourcelocker.serviceaccount.create` and `resourcelocker.clusterrolebinding.create` to `False` respectively.
+Users can choose to bring their own ServiceAccount or ClusterRoleBinding, by setting component parameters `patches.serviceaccount.create` and `patches.clusterrolebinding.create` to `False` respectively.
 
 == Patch input format
 

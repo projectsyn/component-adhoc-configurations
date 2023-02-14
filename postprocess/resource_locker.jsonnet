@@ -16,7 +16,14 @@ local rl =
     |||;
 local namespace = inv.parameters.resource_locker.namespace;
 local params = inv.parameters.adhoc_configurations;
-local serviceaccountname = params.resourcelocker.serviceaccount.name;
+local serviceaccountname =
+  (if std.objectHas(inv.parameters.adhoc_configurations, 'resourcelocker') then
+     std.trace(
+       'Parameter `resourcelocker` is deprecated, please migrate your config to pararmeter `patches`.',
+       inv.parameters.adhoc_configurations.resourcelocker
+     )
+   else
+     inv.parameters.adhoc_configurations.patches).serviceaccount.name;
 
 // Extract resource locker chart version to pass to the resource-locker
 // component library's `formatPatch()`.

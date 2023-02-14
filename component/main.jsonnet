@@ -1,9 +1,23 @@
+local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
 local inv = kap.inventory();
-local rl_config = inv.parameters.adhoc_configurations.resourcelocker;
-local sa_config = rl_config.serviceaccount;
-local cr_config = rl_config.clusterrolebinding;
+local params = inv.parameters.adhoc_configurations;
+
+local patch_config =
+  local patches = params.patches;
+  if std.objectHas(params, 'resourcelocker') then
+    patches + com.makeMergeable(
+      std.trace(
+        'Parameter `resourcelocker` is deprecated, please migrate your config to pararmeter `patches`.',
+        params.resourcelocker
+      )
+    )
+  else
+    patches;
+
+local sa_config = patch_config.serviceaccount;
+local cr_config = patch_config.clusterrolebinding;
 local sa_namespace =
   if std.length(std.find('resource-locker', inv.applications)) > 0 then
     inv.parameters.resource_locker.namespace
