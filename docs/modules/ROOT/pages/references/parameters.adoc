@@ -42,7 +42,7 @@ name: adhoc-configurations-manager
 ----
 
 The ServiceAccount to create (or use if `create` is false).
-When `create` is False, a `ServiceAccount` with the given name must exist in the namespace in which the resource-locker-operator is installed.
+When `create` is false, a `ServiceAccount` with the given name must exist in the namespace in which the patch-operator is installed.
 
 === `clusterrolebinding`
 
@@ -58,7 +58,7 @@ clusterrole_name: cluster-admin
 
 Configuration for ClusterRoleBinding.
 The ClusterRoleBinding will only be created if field `create` is true.
-Otherwise the user needs to ensure that the ServiceAccount used for the `ResourceLocker` objects has sufficient permissions to apply the patches.
+Otherwise the user needs to ensure that the ServiceAccount used for the `Patch` objects has sufficient permissions to apply the patches.
 
 The ClusterRoleBinding will refer to a ClusterRole with name `clusterrole_name`.
 The component won't create a ClusterRole, but instead expects that the referenced role exists already.

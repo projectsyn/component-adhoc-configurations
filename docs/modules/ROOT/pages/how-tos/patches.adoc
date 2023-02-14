@@ -8,46 +8,46 @@ The guide assumes that
 
 NOTE: An object patch in the context of this guide is a patch that could be applied with `kubectl patch`.
 
-. Ensure resource-locker-operator is deployed on the cluster.
+. Ensure patch-operator is deployed on the cluster.
 +
 .c-cluster-id.yaml
 [source,yaml]
 ----
 applications:
-  - resource-locker
+  - patch-operator
 ----
 
-. Define your `ResourceLocker` object containing your patch(es)
+. Define your `Patch` object containing your patch(es)
 +
-For example, to patch a service object `my-service` in namespace `my-app` to expose target port 8000 on port 8000 in addition to existing port configurations, we'd supply the following `ResourceLocker` object.
+For example, to patch a service object `my-service` in namespace `my-app` to expose target port 8000 on port 8000 in addition to existing port configurations, we'd supply the following `Patch` object.
 +
 .manifests/c-cluster-id/service-patch.yaml
 [source,yaml]
 ----
-kind: ResourceLocker
+kind: Patch
 metadata:
   name: my-first-patch
 spec:
   patches:
-    - patchTemplate: |- <1>
+    my-app-service: <1>
+      patchTemplate: |- <2>
         spec:
           ports:
             - protocol: TCP
               port: 8000
               targetPort: 8000
-      patchType: application/strategic-merge-patch+json <2>
-      targetObjectRef: <3>
+      patchType: application/strategic-merge-patch+json <3>
+      targetObjectRef: <4>
         apiVersion: v1
         kind: Service
         namespace: my-app
         name: my-service
 ----
-<1> The patch to apply.
-The component can automatically inject `id: patch<N>` into each patch in the template.
-This allows existing patches to continue working when component `resource-locker` is upgraded to v2.x.
-Note that the component doesn't preserve user-provided values for field `id`.
-Further, the component doesn't remove field `id` from the provided patches when component `resource-locker` v1.x is deployed on the cluster.
-<2> The patch strategy to use when applying the patch, must be one of
+<1> The internal identifier for the patch.
+The patch-operator uses the patch id to provide metrics about patch errors and reconcile times for the patch.
+Users should try to keep patch identifiers unique to ensure patch-operator metrics remain usable.
+<2> The patch to apply.
+<3> The patch strategy to use when applying the patch, must be one of
 +
 * `application/json-patch+json` -- equivalent to `kubectl patch --type=json`
 * `application/merge-patch+json` -- equivalent to `kubectl patch --type=merge`
@@ -55,17 +55,17 @@ Further, the component doesn't remove field `id` from the provided patches when 
 * `application/apply-patch+yaml` -- equivalent to `kubectl apply --server-side=true`
 +
 If the field isn't specified, it will default to `application/strategic-merge-patch+json`.
-<3> The object to patch
+<4> The object to patch
 
 +
 [NOTE]
 ====
-A `ResourceLocker` object can contain multiple patches.
-Just add additional entries to the `spec.patches` array in the `ResourceLocker` object.
+A `Patch` object can contain multiple patches.
+Just add additional key-value pairs to the `spec.patches` object in the `Patch` object.
 ====
 
-. Add your `ResourceLocker` manifest in the tenant repo for the cluster on which you want to apply the patch.
+. Add your `Patch` manifest in the tenant repo for the cluster on which you want to apply the patch.
 +
-The file holding the `ResourceLocker` manifest can be named arbitrarily.
+The file holding the `Patch` manifest can be named arbitrarily.
 
 . Recompile the cluster catalog
