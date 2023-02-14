@@ -7,6 +7,8 @@ metadata:
 apiVersion: redhatcop.redhat.io/v1alpha1
 kind: Patch
 metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
   name: adhoc-configurations-test-patch
   namespace: syn-patch-operator
 spec:
@@ -36,6 +38,8 @@ spec:
 apiVersion: redhatcop.redhat.io/v1alpha1
 kind: Patch
 metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
   name: adhoc-configurations-test2
   namespace: syn-patch-operator
 spec:

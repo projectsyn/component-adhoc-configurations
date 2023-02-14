@@ -49,12 +49,15 @@ local patch(obj) =
     obj {
       apiVersion: po.apiVersion,
       [if obj.kind != 'Patch' then 'kind']: std.trace(
-        'Transforming %s resource into patch' % obj.kind,
+        'Transforming %s %s into Patch' % [ obj.kind, obj.metadata.name ],
         'Patch'
       ),
       metadata+: {
         name: prefixed_name,
         namespace: namespace,
+        annotations+: {
+          'argocd.argoproj.io/sync-options': 'SkipDryRunOnMissingResource=true',
+        },
       },
       spec+: {
         [if std.objectHas(obj.spec, 'patches') then 'patches']:
