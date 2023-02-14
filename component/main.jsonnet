@@ -19,10 +19,10 @@ local patch_config =
 local sa_config = patch_config.serviceaccount;
 local cr_config = patch_config.clusterrolebinding;
 local sa_namespace =
-  if std.length(std.find('resource-locker', inv.applications)) > 0 then
-    inv.parameters.resource_locker.namespace
+  if std.length(std.find('patch-operator', inv.applications)) > 0 then
+    inv.parameters.patch_operator.namespace
   else
-    error 'adhoc_configurations: object patches require component resource-locker';
+    error 'adhoc_configurations: object patches require component patch-operator';
 
 local tokensecret = kube.Secret(sa_config.name) {
   metadata+: {
@@ -60,5 +60,5 @@ local rbac = std.filter(function(it) it != null, [
 
 
 {
-  [if std.length(rbac) > 0 then '00_resource_locker_rbac']: rbac,
+  [if std.length(rbac) > 0 then '00_patch_operator_rbac']: rbac,
 }

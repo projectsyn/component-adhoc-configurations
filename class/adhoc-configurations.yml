@@ -18,4 +18,4 @@ parameters:
       filters:
         - type: jsonnet
           path: adhoc-configurations/
-          filter: postprocess/resource_locker.jsonnet
+          filter: postprocess/patch_operator.jsonnet

@@ -5,7 +5,7 @@ metadata:
   labels:
     name: adhoc-configurations-manager
   name: adhoc-configurations-manager
-  namespace: syn-resource-locker
+  namespace: syn-patch-operator
 secrets:
   - name: adhoc-configurations-manager
 ---
@@ -17,7 +17,7 @@ metadata:
   labels:
     name: adhoc-configurations-manager
   name: adhoc-configurations-manager
-  namespace: syn-resource-locker
+  namespace: syn-patch-operator
 type: kubernetes.io/service-account-token
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -34,4 +34,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: adhoc-configurations-manager
-    namespace: syn-resource-locker
+    namespace: syn-patch-operator

@@ -5,13 +5,13 @@ metadata:
   namespace: test
 ---
 apiVersion: redhatcop.redhat.io/v1alpha1
-kind: ResourceLocker
+kind: Patch
 metadata:
   name: adhoc-configurations-test-patch
-  namespace: syn-resource-locker
+  namespace: syn-patch-operator
 spec:
   patches:
-    - id: patch0
+    patch-service:
       patchTemplate: |-
         spec:
           ports:
@@ -22,7 +22,7 @@ spec:
         kind: Service
         name: test
         namespace: test
-    - id: patch1
+    patch2:
       patchTemplate: 'spec: {}'
       patchType: application/strategic-merge-patch+json
       targetObjectRef:
@@ -34,11 +34,22 @@ spec:
     name: adhoc-configurations-manager
 ---
 apiVersion: redhatcop.redhat.io/v1alpha1
-kind: ResourceLocker
+kind: Patch
 metadata:
   name: adhoc-configurations-test2
-  namespace: syn-resource-locker
+  namespace: syn-patch-operator
 spec:
-  resources: []
+  patches:
+    foo:
+      patchTemplate: |-
+        metadata:
+          annotations:
+            patched: patched
+      patchType: application/strategic-merge-patch+json
+      targetObjectRef:
+        apiVersion: v1
+        kind: ServiceAccount
+        name: test
+        namespace: test
   serviceAccountRef:
     name: adhoc-configurations-manager

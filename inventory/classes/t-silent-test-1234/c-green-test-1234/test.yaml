@@ -10,7 +10,8 @@ metadata:
   name: test-patch
 spec:
   patches:
-    - patchTemplate: |-
+    - id: patch-service
+      patchTemplate: |-
         spec:
           ports:
             - protocol: TCP
@@ -29,8 +30,19 @@ spec:
         namespace: test
         name: test
 ---
-kind: ResourceLocker
+kind: Patch
 metadata:
   name: test2
 spec:
-  resources: []
+  patches:
+    foo:
+      patchTemplate: |-
+        metadata:
+          annotations:
+            patched: patched
+      patchType: application/strategic-merge-patch+json
+      targetObjectRef:
+        apiVersion: v1
+        kind: ServiceAccount
+        namespace: test
+        name: test
