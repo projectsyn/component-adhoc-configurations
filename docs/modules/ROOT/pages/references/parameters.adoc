@@ -25,7 +25,7 @@ Base directory in which the ad-hoc manifests are saved in the tenant repo.
 The component will copy any files saved at the path indicated by `manifests_path` in the tenant repo to the cluster catalog.
 
 
-== `resourcelocker`
+== `patches`
 
 Section to configure ServiceAccount and ClusterRoleBinding which will be used for object patches.
 
@@ -37,12 +37,12 @@ default::
 +
 [source,yaml]
 ----
-create: True
+create: true
 name: adhoc-configurations-manager
 ----
 
-The ServiceAccount to create (or use if `create` is False).
-When `create` is False, a `ServiceAccount` with the given name must exist in the namespace in which the resource-locker-operator is installed.
+The ServiceAccount to create (or use if `create` is false).
+When `create` is false, a `ServiceAccount` with the given name must exist in the namespace in which the patch-operator is installed.
 
 === `clusterrolebinding`
 
@@ -52,13 +52,13 @@ default::
 +
 [source,yaml]
 ----
-create: True
+create: true
 clusterrole_name: cluster-admin
 ----
 
 Configuration for ClusterRoleBinding.
-The ClusterRoleBinding will only be created if field `create` is True.
-Otherwise the user needs to ensure that the ServiceAccount used for the `ResourceLocker` objects has sufficient permissions to apply the patches.
+The ClusterRoleBinding will only be created if field `create` is true.
+Otherwise the user needs to ensure that the ServiceAccount used for the `Patch` objects has sufficient permissions to apply the patches.
 
 The ClusterRoleBinding will refer to a ClusterRole with name `clusterrole_name`.
 The component won't create a ClusterRole, but instead expects that the referenced role exists already.

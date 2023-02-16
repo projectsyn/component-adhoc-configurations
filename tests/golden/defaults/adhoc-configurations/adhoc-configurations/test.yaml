@@ -1,16 +1,19 @@
----
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: test
   namespace: test
 ---
-kind: ResourceLocker
+apiVersion: redhatcop.redhat.io/v1alpha1
+kind: Patch
 metadata:
-  name: test-patch
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+  name: adhoc-configurations-test-patch
+  namespace: syn-patch-operator
 spec:
   patches:
-    - id: patch-service
+    patch-service:
       patchTemplate: |-
         spec:
           ports:
@@ -19,20 +22,26 @@ spec:
       targetObjectRef:
         apiVersion: v1
         kind: Service
-        namespace: test
         name: test
-    - patchTemplate: |-
-        spec: {}
+        namespace: test
+    patch2:
+      patchTemplate: 'spec: {}'
       patchType: application/strategic-merge-patch+json
       targetObjectRef:
         apiVersion: v1
         kind: Endpoints
-        namespace: test
         name: test
+        namespace: test
+  serviceAccountRef:
+    name: adhoc-configurations-manager
 ---
+apiVersion: redhatcop.redhat.io/v1alpha1
 kind: Patch
 metadata:
-  name: test2
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+  name: adhoc-configurations-test2
+  namespace: syn-patch-operator
 spec:
   patches:
     foo:
@@ -44,5 +53,7 @@ spec:
       targetObjectRef:
         apiVersion: v1
         kind: ServiceAccount
-        namespace: test
         name: test
+        namespace: test
+  serviceAccountRef:
+    name: adhoc-configurations-manager

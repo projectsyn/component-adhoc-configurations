@@ -2,10 +2,10 @@ parameters:
   adhoc_configurations:
     argocd_ignore_differences: {}
     manifests_path: manifests/${cluster:name}
-    resourcelocker:
+    patches:
       serviceaccount:
-        create: True
+        create: true
         name: adhoc-configurations-manager
       clusterrolebinding:
-        create: True
+        create: true
         clusterrole_name: cluster-admin
