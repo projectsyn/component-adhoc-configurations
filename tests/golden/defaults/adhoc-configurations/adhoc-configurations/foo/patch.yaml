@@ -1,0 +1,11 @@
+apiVersion: redhatcop.redhat.io/v1alpha1
+kind: Patch
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+  name: adhoc-configurations-test-patch-subdir
+  namespace: syn-patch-operator
+spec:
+  patches: {}
+  serviceAccountRef:
+    name: adhoc-configurations-manager

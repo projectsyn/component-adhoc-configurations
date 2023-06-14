@@ -116,10 +116,23 @@ local stem(elem) =
   local elems = std.split(elem, '.');
   std.join('.', elems[:std.length(elems) - 1]);
 
+local files =
+  com.list_dir(manifests_dir) +
+  std.flattenArrays(
+    [
+      std.map(
+        function(elem) subdir + '/' + elem,
+        com.list_dir(manifests_dir + '/' + subdir)
+      )
+      for subdir in params.patch_subdirectories
+    ]
+  );
+
+
 local output = {
   local input_file(elem) = manifests_dir + '/' + elem,
-  [stem(elem)]: fixup(input_file(elem))
-  for elem in com.list_dir(manifests_dir)
+  [stem(file)]: fixup(input_file(file))
+  for file in files
 };
 
 {

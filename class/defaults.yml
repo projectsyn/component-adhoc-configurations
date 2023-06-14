@@ -2,6 +2,7 @@ parameters:
   adhoc_configurations:
     argocd_ignore_differences: {}
     manifests_path: manifests/${cluster:name}
+    patch_subdirectories: []
     patches:
       serviceaccount:
         create: true

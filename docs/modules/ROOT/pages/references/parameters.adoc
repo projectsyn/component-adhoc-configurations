@@ -24,6 +24,12 @@ Base directory in which the ad-hoc manifests are saved in the tenant repo.
 
 The component will copy any files saved at the path indicated by `manifests_path` in the tenant repo to the cluster catalog.
 
+== `patch_subdirectories`
+type:: list
+default:: `[]`
+
+A list of subdirectories of `manifests_path` in which the component should search for `Patch` resources.
+This allows users to store partial `Patch` resources in a subdirectory of `manifests_path` without having to manage the patch-operator RBAC themselves.
 
 == `patches`
 
