@@ -20,6 +20,10 @@ local app = argocd.App('adhoc-configurations', 'default') {
   },
 };
 
+local appPath =
+  local project = std.get(std.get(app, 'spec', {}), 'project', 'syn');
+  if project == 'syn' then 'apps' else 'apps-%s' % project;
+
 {
-  'adhoc-configurations': app,
+  ['%s/adhoc-configurations' % appPath]: app,
 }
