@@ -2,6 +2,7 @@ parameters:
   adhoc_configurations:
     =_metadata:
       multi_tenant: true
+      multi_instance: true
     argocd_ignore_differences: {}
     manifests_path: manifests/${cluster:name}
     patch_subdirectories: []
