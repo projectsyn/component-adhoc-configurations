@@ -3,9 +3,21 @@ local inv = kap.inventory();
 local params = inv.parameters.adhoc_configurations;
 local argocd = import 'lib/argocd.libjsonnet';
 
+local instance = inv.parameters._instance;
+
+local validate_config(app) =
+  local default_manifests_path = 'manifests/%s' % inv.parameters.cluster.name;
+  if inv.parameters._instance != 'adhoc-configurations' &&
+     params.manifests_path == default_manifests_path then
+    error
+      'manifests path `%s` is reserved ' % default_manifests_path +
+      'for the unaliased `adhoc-configurations` component'
+  else
+    app;
+
 // We target the App at the default namespace with the understanding that
 // manifests should always be be namespaced
-local app = argocd.App('adhoc-configurations', 'default') {
+local app = argocd.App(instance, 'default', base='adhoc-configurations') {
   spec+: {
     ignoreDifferences:
       // This completely ignores the keys in the parameter, since we only use
@@ -25,5 +37,5 @@ local appPath =
   if project == 'syn' then 'apps' else 'apps-%s' % project;
 
 {
-  ['%s/adhoc-configurations' % appPath]: app,
+  ['%s/%s' % [ appPath, instance ]]: validate_config(app),
 }
