@@ -4,11 +4,3 @@ parameters:
       multi_tenant: true
     argocd_ignore_differences: {}
     manifests_path: manifests/${cluster:name}
-    patch_subdirectories: []
-    patches:
-      serviceaccount:
-        create: true
-        name: adhoc-configurations-manager
-      clusterrolebinding:
-        create: true
-        clusterrole_name: cluster-admin

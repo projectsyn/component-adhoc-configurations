@@ -13,5 +13,3 @@ parameters:
 
   adhoc_configurations:
     manifests_path: ${cluster:name}
-    patch_subdirectories:
-      - foo
