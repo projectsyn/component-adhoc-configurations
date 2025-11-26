@@ -9,13 +9,3 @@ parameters:
           - inventory/classes/${cluster:tenant}/${adhoc_configurations:manifests_path}
         input_type: copy
         output_path: adhoc-configurations/
-      - input_paths:
-          - adhoc-configurations/component/main.jsonnet
-        input_type: jsonnet
-        output_path: adhoc-configurations/
-  commodore:
-    postprocess:
-      filters:
-        - type: jsonnet
-          path: adhoc-configurations/
-          filter: postprocess/patch_operator.jsonnet
