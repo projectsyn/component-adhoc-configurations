@@ -1,2 +1,5 @@
 spec:
   ignoreDifferences: []
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
