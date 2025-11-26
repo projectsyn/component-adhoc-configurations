@@ -7,6 +7,11 @@ local argocd = import 'lib/argocd.libjsonnet';
 // manifests should always be be namespaced
 local app = argocd.App('adhoc-configurations', 'default') {
   spec+: {
+    syncPolicy+: {
+      syncOptions+: [
+        'ServerSideApply=true',
+      ],
+    },
     ignoreDifferences:
       // This completely ignores the keys in the parameter, since we only use
       // a dictionary over a list to allow users to edit existing entries in
